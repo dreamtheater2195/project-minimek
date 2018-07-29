@@ -6,11 +6,16 @@ import {
 import TabBarContainer from './features/tabs/TabBarContainer';
 import './App.css';
 
+import UnitInfo from "./features/unitInfo/UnitInfo";
+import Pilots from "./features/pilots/Pilots";
+import Mechs from "./features/mechs/Mechs";
+import UnitOrganization from "./features/unitOrganization/UnitOrganization";
+
 const tabs = [
-  { name: "Unit Info" },
-  { name: "Pilots" },
-  { name: "Mechs" },
-  { name: "Unit Organization" }
+  { name: "unitInfo", label: "Unit Info", component: UnitInfo, },
+  { name: "pilots", label: "Pilots", component: Pilots, },
+  { name: "mechs", label: "Mechs", component: Mechs, },
+  { name: "unitOrganization", label: "Unit Organization", component: UnitOrganization }
 ];
 class App extends Component {
   render() {
@@ -20,7 +25,7 @@ class App extends Component {
           <Header inverted as="h1">Project Mini-Mek</Header>
         </div>
         <Container>
-          <TabBarContainer tabs={tabs} />
+          <TabBarContainer tabs={tabs} size="massive" />
         </Container>
       </div>
 
