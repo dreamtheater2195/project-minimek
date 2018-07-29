@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
 import {
   Header,
-  Container,
-  Menu,
+  Container
 } from "semantic-ui-react";
+import TabBarContainer from './features/tabs/TabBarContainer';
 import './App.css';
+
+const tabs = [
+  { name: "Unit Info" },
+  { name: "Pilots" },
+  { name: "Mechs" },
+  { name: "Unit Organization" }
+];
 class App extends Component {
   render() {
     return (
@@ -13,12 +20,7 @@ class App extends Component {
           <Header inverted as="h1">Project Mini-Mek</Header>
         </div>
         <Container>
-          <Menu tabular size="massive">
-            <Menu.Item name="unitInfo" active={true}>Unit Info</Menu.Item>
-            <Menu.Item name="pilots" active={false}>Pilots</Menu.Item>
-            <Menu.Item name="mechs" active={false}>Mechs</Menu.Item>
-            <Menu.Item name="unitOrganization" active={false}>Unit Organization</Menu.Item>
-          </Menu>
+          <TabBarContainer tabs={tabs} />
         </Container>
       </div>
 
