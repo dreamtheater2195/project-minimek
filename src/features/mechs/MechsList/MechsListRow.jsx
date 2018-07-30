@@ -46,7 +46,6 @@ const mapStateToProps = (state, ownProps) => {
     const { Mech } = session;
 
     let mech;
-    console.log(ownProps.mechID);
     if (Mech.hasId(ownProps.mechID)) {
         const mechModel = Mech.withId(ownProps.mechID);
         mech = {
