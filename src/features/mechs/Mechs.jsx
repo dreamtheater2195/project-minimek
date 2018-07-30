@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import { connect } from 'react-redux';
 import {
     Grid,
     Segment,
@@ -8,25 +8,12 @@ import {
 
 import MechsList from "./MechsList";
 import MechDetails from "./MechDetails";
-
-
-const mechs = [
-    {
-        id: 1,
-        name: "Warhammer",
-        type: "WHM-6R",
-        weight: 70,
-    }
-];
+import schema from '../../schema';
 
 class Mechs extends Component {
-    state = {
-        mechs: mechs,
-    }
-
     render() {
-        const { mechs } = this.state;
-
+        const { mechs = [] } = this.props;
+        console.log(mechs);
         const currentMech = mechs[0] || {};
 
         return (
@@ -47,4 +34,24 @@ class Mechs extends Component {
         );
     }
 }
-export default Mechs;
+
+const mapStateToProps = (state) => {
+    const session = schema.from(state.entities);
+    const { Mech } = session;
+
+    const mechs = Mech.all().withModels.map(mechModel => {
+        const mech = {
+            ...mechModel.ref,
+            mechType: {}
+        };
+
+        if (mechModel.type) {
+            mech.mechType = { ...mechModel.type.ref }
+        }
+
+        return mech;
+    });
+
+    return { mechs };
+}
+export default connect(mapStateToProps)(Mechs);

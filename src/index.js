@@ -38,5 +38,3 @@ if (module.hot) {
 }
 
 render();
-
-console.log(store.getState())
