@@ -1,4 +1,4 @@
-import { SELECT_PILOT } from './pilotsConstants';
+import { SELECT_PILOT, PILOT_EDIT_START, PILOT_EDIT_STOP } from './pilotsConstants';
 
 export function selectPilot(pilotID) {
     return {
@@ -6,3 +6,15 @@ export function selectPilot(pilotID) {
         payload: { currentPilot: pilotID }
     }
 }
+
+export function startEditingPilot() {
+    return {
+        type: PILOT_EDIT_START,
+    };
+}
+
+export function stopEditingPilot() {
+    return {
+        type: PILOT_EDIT_STOP,
+    };
+} 	
