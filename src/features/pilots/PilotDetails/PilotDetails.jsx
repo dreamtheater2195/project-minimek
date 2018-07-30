@@ -1,9 +1,9 @@
 import React from "react";
-import { Form, Dropdown } from "semantic-ui-react";
+import { Form, Dropdown, Grid, Button } from "semantic-ui-react";
 import { connect } from 'react-redux';
 import schema from '../../../schema';
-import { selectCurrentPilot } from '../pilotsSelectors';
-
+import { selectCurrentPilot, selectIsEditingPilot } from '../pilotsSelectors';
+import { startEditingPilot, stopEditingPilot } from '../pilotsActions';
 const RANKS = [
     { value: "Private", text: "Private" },
     { value: "Corporal", text: "Corporal" },
@@ -18,7 +18,7 @@ const MECHS = [
     { value: "WHM-6R", text: "Warhammer WHM-6R" }
 ];
 
-const PilotDetails = ({ pilot = {} }) => {
+const PilotDetails = ({ pilot = {}, pilotIsSelected = false, isEditingPilot = false, ...actions }) => {
     const {
         name = "",
         rank = "",
@@ -27,6 +27,9 @@ const PilotDetails = ({ pilot = {} }) => {
         piloting = "",
         mechType = "",
     } = pilot;
+
+    const canStartEditing = pilotIsSelected && !isEditingPilot;
+    const canStopEditing = pilotIsSelected && isEditingPilot;
     return (
         <Form size="large">
             <Form.Field name="name" width={16} >
@@ -34,7 +37,7 @@ const PilotDetails = ({ pilot = {} }) => {
                 <input
                     placeholder="Name"
                     value={name}
-                    disabled={true}
+                    disabled={!canStopEditing}
                 />
             </Form.Field>
             <Form.Field name="rank" width={16}>
@@ -44,7 +47,7 @@ const PilotDetails = ({ pilot = {} }) => {
                     selection
                     options={RANKS}
                     value={rank}
-                    disabled={true}
+                    disabled={!canStopEditing}
                 />
             </Form.Field>
             <Form.Field name="age" width={6} >
@@ -52,21 +55,21 @@ const PilotDetails = ({ pilot = {} }) => {
                 <input
                     placeholder="Age"
                     value={age}
-                    disabled={true}
+                    disabled={!canStopEditing}
                 />
             </Form.Field>
             <Form.Field name="gunnery" width={6} >
                 <label>Gunnery</label>
                 <input
                     value={gunnery}
-                    disabled={true}
+                    disabled={!canStopEditing}
                 />
             </Form.Field>
             <Form.Field name="piloting" width={6} >
                 <label>Piloting</label>
                 <input
                     value={piloting}
-                    disabled={true}
+                    disabled={!canStopEditing}
                 />
             </Form.Field>
             <Form.Field name="mech" width={16}>
@@ -76,9 +79,27 @@ const PilotDetails = ({ pilot = {} }) => {
                     selection
                     options={MECHS}
                     value={mechType}
-                    disabled={true}
+                    disabled={!canStopEditing}
                 />
             </Form.Field>
+            <Grid.Row width={16}>
+                <Button
+                    primary
+                    disabled={!canStartEditing}
+                    type="button"
+                    onClick={actions.startEditingPilot}
+                >
+                    Start Editing
+                </Button>
+                <Button
+                    secondary
+                    disabled={!canStopEditing}
+                    type="button"
+                    onClick={actions.stopEditingPilot}
+                >
+                    Stop Editing
+                </Button>
+            </Grid.Row>
         </Form>
     )
 }
@@ -91,7 +112,14 @@ const mapStateToProps = (state) => {
     if (Pilot.hasId(currentPilotId)) {
         pilot = Pilot.withId(currentPilotId).ref;
     }
-    return { pilot };
+    const pilotIsSelected = Boolean(currentPilotId);
+    const isEditingPilot = selectIsEditingPilot(state);
+
+    return { pilot, pilotIsSelected, isEditingPilot };
 }
 
-export default connect(mapStateToProps)(PilotDetails);
+const actions = {
+    startEditingPilot,
+    stopEditingPilot
+}
+export default connect(mapStateToProps, actions)(PilotDetails);
