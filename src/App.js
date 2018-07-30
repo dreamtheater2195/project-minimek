@@ -6,16 +6,17 @@ import {
 import TabBarContainer from './features/tabs/TabBarContainer';
 import './App.css';
 
-import UnitInfo from "./features/unitInfo/UnitInfo";
-import Pilots from "./features/pilots/Pilots";
-import Mechs from "./features/mechs/Mechs";
-import UnitOrganization from "./features/unitOrganization/UnitOrganization";
-
+import UnitInfo from "./features/unitInfo";
+import Pilots from "./features/pilots";
+import Mechs from "./features/mechs";
+import UnitOrganization from "./features/unitOrganization";
+import Tools from "./features/tools";
 const tabs = [
   { name: "unitInfo", label: "Unit Info", component: UnitInfo, },
   { name: "pilots", label: "Pilots", component: Pilots, },
   { name: "mechs", label: "Mechs", component: Mechs, },
-  { name: "unitOrganization", label: "Unit Organization", component: UnitOrganization }
+  { name: "unitOrganization", label: "Unit Organization", component: UnitOrganization },
+  { name: "tools", label: "Tools", component: Tools }
 ];
 class App extends Component {
   render() {
