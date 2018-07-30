@@ -1,8 +1,8 @@
 import React from "react";
 import { Table } from "semantic-ui-react";
-
+import { connect } from 'react-redux';
 import { getWeightClass } from "../mechSelectors";
-
+import schema from '../../../schema';
 const MechsListRow = ({ mech, onMechClicked, selected }) => {
     const {
         id = null,
@@ -41,5 +41,25 @@ const MechsListRow = ({ mech, onMechClicked, selected }) => {
     );
 }
 
+const mapStateToProps = (state, ownProps) => {
+    const session = schema.from(state.entities);
+    const { Mech } = session;
 
-export default MechsListRow;
+    let mech;
+    console.log(ownProps.mechID);
+    if (Mech.hasId(ownProps.mechID)) {
+        const mechModel = Mech.withId(ownProps.mechID);
+        mech = {
+            ...mechModel.ref,
+            mechType: {}
+        };
+        if (mechModel.type) {
+            mech.mechType = {
+                ...mechModel.type.ref
+            };
+        }
+    }
+    return { mech };
+}
+
+export default connect(mapStateToProps)(MechsListRow);

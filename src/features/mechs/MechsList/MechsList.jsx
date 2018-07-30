@@ -1,20 +1,23 @@
 import React, { Component } from "react";
 import { Table } from "semantic-ui-react";
-
+import { connect } from 'react-redux';
 import MechsListHeader from "./MechsListHeader";
 import MechsListRow from "./MechsListRow";
+import schema from '../../../schema';
+import { selectMech } from '../mechActions';
+import { selectCurrentMech } from '../mechSelectors';
 
-export default class MechsList extends Component {
+class MechsList extends Component {
 
     render() {
-        const { mechs = [], onMechClicked, currentMech } = this.props;
+        const { mechIDs = [], selectMech, currentMechID } = this.props;
 
-        const mechRows = mechs.map(mech => (
+        const mechRows = mechIDs.map(mechID => (
             <MechsListRow
-                mech={mech}
-                key={mech.id}
-                onMechClicked={onMechClicked}
-                selected={currentMech === mech.id}
+                mechID={mechID}
+                key={mechID}
+                onMechClicked={selectMech}
+                selected={currentMechID === mechID}
             />
         ));
 
@@ -28,3 +31,20 @@ export default class MechsList extends Component {
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    const session = schema.from(state.entities);
+    const { Mech } = session;
+
+    const mechIDs = Mech.all().withModels.map(mechModel => mechModel.getId());
+
+    const currentMechID = selectCurrentMech(state);
+
+    return { mechIDs, currentMechID };
+}
+
+const mapDispatchToProps = {
+    selectMech
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MechsList);

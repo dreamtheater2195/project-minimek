@@ -27,7 +27,6 @@ const PilotDetails = ({ pilot = {} }) => {
         piloting = "",
         mechType = "",
     } = pilot;
-    console.log(pilot);
     return (
         <Form size="large">
             <Form.Field name="name" width={16} >
