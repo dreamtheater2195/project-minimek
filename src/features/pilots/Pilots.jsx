@@ -9,22 +9,29 @@ import {
 } from 'semantic-ui-react';
 import schema from '../../schema';
 
+import { selectPilot } from "./pilotsActions";
+import { selectCurrentPilot } from "./pilotsSelectors";
+
 class Pilots extends Component {
     render() {
-        const { pilots = [] } = this.props;
-        const currentPilot = pilots[0] || {};
+        const { pilots = [], currentPilot, selectPilot } = this.props;
+        const currentPilotEntry = pilots.find(pilot => pilot.id === currentPilot) || {}
         return (
             <Segment>
                 <Grid>
                     <Grid.Column width={10}>
                         <Header as="h3">Pilot List</Header>
-                        <PilotsList pilots={pilots} />
+                        <PilotsList
+                            pilots={pilots}
+                            onPilotClicked={selectPilot}
+                            currentPilot={currentPilot}
+                        />
                     </Grid.Column>
 
                     <Grid.Column width={6}>
                         <Header as="h3">Pilot Details</Header>
                         <Segment>
-                            <PilotDetails pilot={currentPilot} />
+                            <PilotDetails pilot={currentPilotEntry} />
                         </Segment>
                     </Grid.Column>
                 </Grid>
@@ -68,8 +75,14 @@ const mapStateToProps = (state) => {
         }
 
         return pilot;
-    })
+    });
 
-    return { pilots };
+    const currentPilot = selectCurrentPilot(state);
+
+    return { pilots, currentPilot };
 }
-export default connect(mapStateToProps)(Pilots); 
+
+const actions = {
+    selectPilot
+}
+export default connect(mapStateToProps, actions)(Pilots); 
