@@ -1,5 +1,9 @@
 import React from "react";
 import { Form, Dropdown } from "semantic-ui-react";
+import { connect } from 'react-redux';
+import schema from '../../../schema';
+import { selectCurrentPilot } from '../pilotsSelectors';
+
 const RANKS = [
     { value: "Private", text: "Private" },
     { value: "Corporal", text: "Corporal" },
@@ -23,7 +27,7 @@ const PilotDetails = ({ pilot = {} }) => {
         piloting = "",
         mechType = "",
     } = pilot;
-
+    console.log(pilot);
     return (
         <Form size="large">
             <Form.Field name="name" width={16} >
@@ -31,6 +35,7 @@ const PilotDetails = ({ pilot = {} }) => {
                 <input
                     placeholder="Name"
                     value={name}
+                    disabled={true}
                 />
             </Form.Field>
             <Form.Field name="rank" width={16}>
@@ -40,6 +45,7 @@ const PilotDetails = ({ pilot = {} }) => {
                     selection
                     options={RANKS}
                     value={rank}
+                    disabled={true}
                 />
             </Form.Field>
             <Form.Field name="age" width={6} >
@@ -47,18 +53,21 @@ const PilotDetails = ({ pilot = {} }) => {
                 <input
                     placeholder="Age"
                     value={age}
+                    disabled={true}
                 />
             </Form.Field>
             <Form.Field name="gunnery" width={6} >
                 <label>Gunnery</label>
                 <input
                     value={gunnery}
+                    disabled={true}
                 />
             </Form.Field>
             <Form.Field name="piloting" width={6} >
                 <label>Piloting</label>
                 <input
                     value={piloting}
+                    disabled={true}
                 />
             </Form.Field>
             <Form.Field name="mech" width={16}>
@@ -68,10 +77,22 @@ const PilotDetails = ({ pilot = {} }) => {
                     selection
                     options={MECHS}
                     value={mechType}
+                    disabled={true}
                 />
             </Form.Field>
         </Form>
     )
 }
 
-export default PilotDetails;
+const mapStateToProps = (state) => {
+    let pilot;
+    const currentPilotId = selectCurrentPilot(state);
+    const session = schema.from(state.entities);
+    const { Pilot } = session;
+    if (Pilot.hasId(currentPilotId)) {
+        pilot = Pilot.withId(currentPilotId).ref;
+    }
+    return { pilot };
+}
+
+export default connect(mapStateToProps)(PilotDetails);

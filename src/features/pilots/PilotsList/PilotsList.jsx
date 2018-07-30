@@ -2,15 +2,20 @@ import React, { Component } from "react";
 import { Table } from "semantic-ui-react";
 import PilotsListHeader from "./PilotsListHeader";
 import PilotsListRow from "./PilotsListRow";
-export default class PilotsList extends Component {
+import { connect } from "react-redux";
+import schema from "../../../schema";
+import { selectPilot } from "../pilotsActions";
+import { selectCurrentPilot } from "../pilotsSelectors";
+
+class PilotsList extends Component {
     render() {
-        const { pilots, onPilotClicked, currentPilot } = this.props;
-        const pilotRows = pilots.map(pilot => (
+        const { pilotIDs = [], selectPilot, currentPilotID } = this.props;
+        const pilotRows = pilotIDs.map(pilotID => (
             <PilotsListRow
-                pilot={pilot}
-                key={pilot.name}
-                onPilotClicked={onPilotClicked}
-                selected={pilot.id === currentPilot}
+                pilotID={pilotID}
+                key={pilotID}
+                onPilotClicked={selectPilot}
+                selected={pilotID === currentPilotID}
             />
         ));
 
@@ -24,3 +29,22 @@ export default class PilotsList extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    const session = schema.from(state.entities);
+    const { Pilot } = session;
+
+    // Extract a list of IDs for each Pilot entry
+    const pilotIDs = Pilot.all().withModels.map(pilotModel => pilotModel.getId());
+
+    const currentPilotID = selectCurrentPilot(state);
+
+    // Return the list of pilot IDs and the current pilot ID as props
+    return { pilotIDs, currentPilotID };
+}
+
+const actions = {
+    selectPilot,
+};
+
+export default connect(mapStateToProps, actions)(PilotsList);
