@@ -1,3 +1,4 @@
+import { createSelector } from 'reselect';
 const WEIGHT_CLASSES = [
     { name: "Light", weights: [20, 25, 30, 35] },
     { name: "Medium", weights: [40, 45, 50, 55] },
@@ -9,3 +10,8 @@ export function getWeightClass(weight) {
     const weightClass = WEIGHT_CLASSES.find(wc => wc.weights.includes(weight)) || { name: "Unknown" };
     return weightClass.name;
 }
+
+export const selectCurrentMech = createSelector(
+    state => state.mechs,
+    mechs => mechs.currentMech
+);
