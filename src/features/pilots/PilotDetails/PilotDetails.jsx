@@ -1,15 +1,13 @@
 import React, { Component } from "react";
 import { Form, Dropdown, Grid, Button } from "semantic-ui-react";
 import { connect } from 'react-redux';
-import schema from '../../../schema';
 import { selectCurrentPilot, selectIsEditingPilot } from '../pilotsSelectors';
-import { startEditingPilot, stopEditingPilot } from '../pilotsActions';
-import { updateEntity } from '../../entities/entityActions';
+import { startEditingPilot, stopEditingPilot, cancelEditingPilot } from '../pilotsActions';
 import { getValueFromEvent } from '../../../common/utils/clientUtils';
 import FormEditWrapper from '../../../common/components/FormEditWrapper';
 import { getEntitiesSession } from "../../../features/entities/entitySelectors";
 import { getEditingEntitiesSession } from "../../../features/editing/editingSelectors";
-import { editItemAttributes } from '../../editing/editingActions';
+import { editItemAttributes, resetEditingItem } from '../../editing/editingActions';
 const RANKS = [
     { value: "Private", text: "Private" },
     { value: "Corporal", text: "Corporal" },
@@ -51,16 +49,19 @@ export class PilotDetails extends Component {
     }
 
     onStartEditingClicked = () => {
-        const { id } = this.props.pilot;
-        this.props.startEditingPilot(id);
+        this.props.startEditingPilot();
     }
     onStopEditingClicked = () => {
+        this.props.stopEditingPilot();
+    }
+
+    onResetClicked = () => {
         const { id } = this.props.pilot;
-        this.props.stopEditingPilot(id);
+        this.props.resetEditedItem("Pilot", id);
     }
     render() {
 
-        const { pilot = {}, pilotIsSelected = false, isEditingPilot = false, ...actions } = this.props;
+        const { pilot = {}, pilotIsSelected = false, isEditingPilot = false } = this.props;
         const {
             name = "",
             rank = "",
@@ -72,6 +73,9 @@ export class PilotDetails extends Component {
 
         const canStartEditing = pilotIsSelected && !isEditingPilot;
         const canStopEditing = pilotIsSelected && isEditingPilot;
+
+        const buttonWidth = 140;
+
         return (
             <Form size="large">
                 <FormEditWrapper
@@ -159,17 +163,39 @@ export class PilotDetails extends Component {
                         disabled={!canStartEditing}
                         type="button"
                         onClick={this.onStartEditingClicked}
+                        style={{ width: buttonWidth, marginRight: 10 }}
                     >
-                        Start Editing
-                </Button>
+                        Start Edit
+                    </Button>
                     <Button
                         secondary
                         disabled={!canStopEditing}
                         type="button"
                         onClick={this.onStopEditingClicked}
+                        style={{ width: buttonWidth }}
                     >
-                        Stop Editing
-                </Button>
+                        Save Edits
+                    </Button>
+                </Grid.Row>
+                <br />
+                <Grid.Row width={16}>
+                    <Button
+                        disabled={!canStopEditing}
+                        type="button"
+                        onClick={this.onResetClicked}
+                        style={{ width: buttonWidth, marginRight: 10 }}
+                    >
+                        Reset Values
+                    </Button>
+                    <Button
+                        negative
+                        disabled={!canStopEditing}
+                        type="button"
+                        style={{ width: buttonWidth }}
+                        onClick={this.props.cancelEditingPilot}
+                    >
+                        Cancel Edits
+                    </Button>
                 </Grid.Row>
             </Form>
         )
@@ -197,6 +223,8 @@ const mapStateToProps = (state) => {
 const actions = {
     startEditingPilot,
     stopEditingPilot,
-    editItemAttributes
+    editItemAttributes,
+    cancelEditingPilot,
+    resetEditingItem
 }
 export default connect(mapStateToProps, actions)(PilotDetails);
