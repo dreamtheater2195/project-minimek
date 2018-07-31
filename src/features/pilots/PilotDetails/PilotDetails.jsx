@@ -7,6 +7,9 @@ import { startEditingPilot, stopEditingPilot } from '../pilotsActions';
 import { updateEntity } from '../../entities/entityActions';
 import { getValueFromEvent } from '../../../common/utils/clientUtils';
 import FormEditWrapper from '../../../common/components/FormEditWrapper';
+import { getEntitiesSession } from "../../../features/entities/entitySelectors";
+import { getEditingEntitiesSession } from "../../../features/editing/editingSelectors";
+import { editItemAttributes } from '../../editing/editingActions';
 const RANKS = [
     { value: "Private", text: "Private" },
     { value: "Corporal", text: "Corporal" },
@@ -37,14 +40,23 @@ export class PilotDetails extends Component {
     onInputChanged = (event) => {
         const newValues = getValueFromEvent(event);
         const { id } = this.props.pilot;
-        this.props.updateEntity("Pilot", id, newValues);
+        this.props.editItemAttributes("Pilot", id, newValues);
     }
 
     onDropdownChanged = (e, result) => {
         const { name, value } = result;
         const newValues = { [name]: value };
         const { id } = this.props.pilot;
-        this.props.updateEntity("Pilot", id, newValues);
+        this.props.editItemAttributes("Pilot", id, newValues);
+    }
+
+    onStartEditingClicked = () => {
+        const { id } = this.props.pilot;
+        this.props.startEditingPilot(id);
+    }
+    onStopEditingClicked = () => {
+        const { id } = this.props.pilot;
+        this.props.stopEditingPilot(id);
     }
     render() {
 
@@ -146,7 +158,7 @@ export class PilotDetails extends Component {
                         primary
                         disabled={!canStartEditing}
                         type="button"
-                        onClick={actions.startEditingPilot}
+                        onClick={this.onStartEditingClicked}
                     >
                         Start Editing
                 </Button>
@@ -154,7 +166,7 @@ export class PilotDetails extends Component {
                         secondary
                         disabled={!canStopEditing}
                         type="button"
-                        onClick={actions.stopEditingPilot}
+                        onClick={this.onStopEditingClicked}
                     >
                         Stop Editing
                 </Button>
@@ -167,13 +179,17 @@ export class PilotDetails extends Component {
 const mapStateToProps = (state) => {
     let pilot;
     const currentPilotId = selectCurrentPilot(state);
-    const session = schema.from(state.entities);
-    const { Pilot } = session;
-    if (Pilot.hasId(currentPilotId)) {
-        pilot = Pilot.withId(currentPilotId).ref;
-    }
+
     const pilotIsSelected = Boolean(currentPilotId);
     const isEditingPilot = selectIsEditingPilot(state);
+
+    if (pilotIsSelected) {
+        const session = isEditingPilot ? getEditingEntitiesSession(state) : getEntitiesSession(state);
+        const { Pilot } = session;
+        if (Pilot.hasId(currentPilotId)) {
+            pilot = Pilot.withId(currentPilotId).ref;
+        }
+    }
 
     return { pilot, pilotIsSelected, isEditingPilot };
 }
@@ -181,6 +197,6 @@ const mapStateToProps = (state) => {
 const actions = {
     startEditingPilot,
     stopEditingPilot,
-    updateEntity
+    editItemAttributes
 }
 export default connect(mapStateToProps, actions)(PilotDetails);

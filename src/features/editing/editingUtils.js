@@ -1,5 +1,5 @@
-import schema from "app/schema";
-import { getModelByType } from "common/utils/modelUtils";
+import schema from '../../schema';
+import { getModelByType } from "../../common/utils/modelUtils";
 export function updateEditingEntitiesState(state, updatedEditingEntities) {
     return {
         ...state,
