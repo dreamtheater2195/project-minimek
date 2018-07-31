@@ -1,9 +1,11 @@
 import React from "react";
-import { Table } from "semantic-ui-react";
+import { Table, Button, Icon } from "semantic-ui-react";
 import { connect } from "react-redux";
 import _ from 'lodash';
 import schema from '../../../schema';
-const PilotsListRow = ({ pilot = {}, onPilotClicked = _.noop, selected }) => {
+import { deleteEntity } from '../../entities/entityActions';
+
+const PilotsListRow = ({ pilot = {}, onPilotClicked = _.noop, selected, deleteEntity }) => {
     const {
         id = null,
         name = "",
@@ -13,9 +15,15 @@ const PilotsListRow = ({ pilot = {}, onPilotClicked = _.noop, selected }) => {
         piloting = "",
         mechType = "",
     } = pilot;
+    const onDeleteClicked = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        deleteEntity("Pilot", id);
+    }
+    const onRowClicked = () => onPilotClicked(id);
     return (
         <Table.Row
-            onClick={() => onPilotClicked(id)}
+            onClick={onRowClicked}
             active={selected}
         >
             <Table.Cell>
@@ -33,6 +41,19 @@ const PilotsListRow = ({ pilot = {}, onPilotClicked = _.noop, selected }) => {
             <Table.Cell>
                 {mechType}
             </Table.Cell>
+            <Table.Cell>
+                <Button
+                    compact
+                    basic
+                    circular
+                    size="tiny"
+                    color="red"
+                    icon={<Icon name="delete" />}
+                    onClick={onDeleteClicked}
+                >
+                </Button>
+            </Table.Cell>
+
         </Table.Row>
     );
 }
@@ -55,4 +76,8 @@ const mapStateToProps = (state, ownProps) => {
     }
     return { pilot };
 }
-export default connect(mapStateToProps)(PilotsListRow); 
+
+const mapDispatchToProps = {
+    deleteEntity
+}
+export default connect(mapStateToProps, mapDispatchToProps)(PilotsListRow); 
