@@ -6,5 +6,8 @@ export default class MechDesign extends Model {
     toJSON() {
         return { ...this.ref };
     }
+    updateFrom(otherDesign) {
+        this.update(otherDesign.ref);
+    }
 }
 MechDesign.modelName = "MechDesign"; 

@@ -1,7 +1,8 @@
 import {
     EDIT_ITEM_EXISTING,
     EDIT_ITEM_UPDATE,
-    EDIT_ITEM_STOP
+    EDIT_ITEM_STOP,
+    EDIT_ITEM_APPLY,
 } from "./editingConstants";
 export function editExistingItem(itemType, itemID) {
     return {
@@ -30,4 +31,14 @@ export function stopEditingItem(itemType, itemID) {
             itemID
         },
     };
-} 
+}
+
+export function applyItemEdits(itemType, itemID) {
+    return {
+        type: EDIT_ITEM_APPLY,
+        payload: {
+            itemType,
+            itemID
+        }
+    }
+}
