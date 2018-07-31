@@ -9,6 +9,9 @@ export default class Pilot extends Model {
     static parse(pilotData) {
         return this.create(pilotData);
     }
+    toJSON() {
+        return { ...this.ref };
+    }
 }
 
 Pilot.modelName = "Pilot";

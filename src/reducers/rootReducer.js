@@ -7,6 +7,7 @@ import mechsReducer from '../features/mechs/mechReducer';
 import entitiesReducer from "./entitiesReducer";
 import entityCrudReducer from '../features/entities/entityReducer';
 import editingEntitiesReducer from './editingEntitiesReducer';
+import editingFeatureReducer from '../features/editing/editingReducer';
 const combinedReducer = combineReducers({
     tabs: tabReducer,
     unitInfo: unitInfoReducer,
@@ -18,7 +19,8 @@ const combinedReducer = combineReducers({
 
 const rootReducer = reduceReducers(
     combinedReducer,
-    entityCrudReducer
+    entityCrudReducer,
+    editingFeatureReducer
 );
 
 export default rootReducer;
