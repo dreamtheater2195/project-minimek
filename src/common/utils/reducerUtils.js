@@ -13,7 +13,7 @@ export const reduceReducers = (...reducers) => (state, action) =>
 
 export function createConditionalSliceReducer(sliceName, handlers) {
     // Create a reducer that knows how to handle one slice of state, with these action types
-    const sliceReducer = createReducer({}, fnMap);
+    const sliceReducer = createReducer({}, handlers);
     // Create a new wrapping reducer
     return (state, action) => {
         // Check to see if this slice reducer knows how to handle this action

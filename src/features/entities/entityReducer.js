@@ -19,6 +19,8 @@ export function updateEntity(state, payload) {
     return newState;
 }
 
-export default entityCrudFeatureReducer = createConditionalSliceReducer("entities", {
+const entityCrudFeatureReducer = createConditionalSliceReducer("entities", {
     [ENTITY_UPDATE]: updateEntity
 });
+
+export default entityCrudFeatureReducer;
