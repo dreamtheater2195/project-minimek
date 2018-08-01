@@ -8,8 +8,10 @@ import entitiesReducer from "./entitiesReducer";
 import entityCrudReducer from '../features/entities/entityReducer';
 import editingEntitiesReducer from './editingEntitiesReducer';
 import editingFeatureReducer from '../features/editing/editingReducer';
+import modalsReducer from '../features/modals/modalReducer';
 const combinedReducer = combineReducers({
     tabs: tabReducer,
+    modals: modalsReducer,
     unitInfo: unitInfoReducer,
     pilots: pilotsReducer,
     mechs: mechsReducer,

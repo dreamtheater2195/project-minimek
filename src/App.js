@@ -5,7 +5,7 @@ import {
 } from "semantic-ui-react";
 import TabBarContainer from './features/tabs/TabBarContainer';
 import './App.css';
-
+import ModalManager from "./features/modals/ModalManager";
 import UnitInfo from "./features/unitInfo";
 import Pilots from "./features/pilots";
 import Mechs from "./features/mechs";
@@ -22,6 +22,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <ModalManager />
         <div className="App-header">
           <Header inverted as="h1">Project Mini-Mek</Header>
         </div>

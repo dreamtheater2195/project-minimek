@@ -2,7 +2,7 @@ import React from "react";
 import { Table } from "semantic-ui-react";
 import { connect } from 'react-redux';
 import { getWeightClass } from "../mechSelectors";
-import schema from '../../../schema';
+import orm from '../../../schema';
 const MechsListRow = ({ mech, onMechClicked, selected }) => {
     const {
         id = null,
@@ -42,7 +42,7 @@ const MechsListRow = ({ mech, onMechClicked, selected }) => {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    const session = schema.from(state.entities);
+    const session = orm.session(state.entities);
     const { Mech } = session;
 
     let mech;

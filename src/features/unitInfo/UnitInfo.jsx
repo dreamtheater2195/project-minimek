@@ -3,12 +3,14 @@ import {
     Form,
     Dropdown,
     Segment
-} from "semantic-ui-react";
+} from "semantic-ui-react/dist/commonjs";
 import { connect } from "react-redux";
 import { selectUnitInfo } from "./unitInfoSelectors";
-import { updateUnitInfo } from './unitInfoActions';
+import { updateUnitInfo, updateUnitColor } from './unitInfoActions';
+import { showColorPicker } from '../../common/components/ColorPicker/colorPickerActions';
 import { getValueFromEvent } from '../../common/utils/clientUtils';
 import FormEditWrapper from '../../common/components/FormEditWrapper';
+import ColorPickerButton from '../../common/components/ColorPicker/ColorPickerButton';
 const FACTIONS = [
     { value: "cc", text: "Capellan Confederation" },
     { value: "dc", text: "Draconis Combine" },
@@ -30,9 +32,13 @@ class UnitInfo extends Component {
         const newValues = getValueFromEvent(event);
         this.props.updateUnitInfo(newValues);
     }
+    onColorClicked = () => {
+        const { unitInfo, showColorPicker } = this.props;
+        showColorPicker(unitInfo.color, updateUnitColor(unitInfo.color));
+    }
     render() {
         const { unitInfo, updateUnitInfo } = this.props;
-        const { name, affiliation } = unitInfo;
+        const { name, affiliation, color } = unitInfo;
         return (
             <Segment attached="bottom">
                 <Form size="large">
@@ -60,6 +66,10 @@ class UnitInfo extends Component {
                             onChange={this.onAffiliationChanged}
                         />
                     </Form.Field>
+                    <Form.Field name="color">
+                        <label>Color</label>
+                        <ColorPickerButton value={color} onClick={this.onColorClicked} />
+                    </Form.Field>
                 </Form>
             </Segment>
         );
@@ -71,7 +81,8 @@ const mapStateToProps = (state) => ({
 });
 
 const actions = {
-    updateUnitInfo
+    updateUnitInfo,
+    showColorPicker
 };
 
 export default connect(mapStateToProps, actions)(UnitInfo); 

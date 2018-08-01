@@ -3,7 +3,7 @@ import { Table } from "semantic-ui-react";
 import PilotsListHeader from "./PilotsListHeader";
 import PilotsListRow from "./PilotsListRow";
 import { connect } from "react-redux";
-import schema from "../../../schema";
+import orm from "../../../schema";
 import { selectPilot } from "../pilotsActions";
 import { selectCurrentPilot } from "../pilotsSelectors";
 
@@ -31,7 +31,7 @@ class PilotsList extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const session = schema.from(state.entities);
+    const session = orm.session(state.entities);
     const { Pilot } = session;
 
     // Extract a list of IDs for each Pilot entry

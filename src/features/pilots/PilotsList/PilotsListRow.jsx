@@ -2,7 +2,7 @@ import React from "react";
 import { Table, Button, Icon } from "semantic-ui-react";
 import { connect } from "react-redux";
 import _ from 'lodash';
-import schema from '../../../schema';
+import orm from '../../../schema';
 import { deleteEntity } from '../../entities/entityActions';
 
 const PilotsListRow = ({ pilot = {}, onPilotClicked = _.noop, selected, deleteEntity }) => {
@@ -59,7 +59,7 @@ const PilotsListRow = ({ pilot = {}, onPilotClicked = _.noop, selected, deleteEn
 }
 
 const mapStateToProps = (state, ownProps) => {
-    const session = schema.from(state.entities);
+    const session = orm.session(state.entities);
     const { Pilot } = session;
     let pilot;
     if (Pilot.hasId(ownProps.pilotID)) {

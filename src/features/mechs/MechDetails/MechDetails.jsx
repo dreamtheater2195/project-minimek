@@ -2,7 +2,7 @@ import React from "react";
 import { Form } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { getWeightClass, selectCurrentMech } from "../mechSelectors";
-import schema from '../../../schema';
+import orm from '../../../schema';
 const MechDetails = ({ mech = {} }) => {
     const {
         id = '',
@@ -65,7 +65,7 @@ const MechDetails = ({ mech = {} }) => {
 const mapStateToProps = (state) => {
     let mech;
     const currentMechID = selectCurrentMech(state);
-    const session = schema.from(state.entities);
+    const session = orm.session(state.entities);
     const { Mech } = session;
     if (Mech.hasId(currentMechID)) {
         const mechModel = Mech.withId(currentMechID);

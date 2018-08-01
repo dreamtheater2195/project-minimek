@@ -3,7 +3,7 @@ import { Table } from "semantic-ui-react";
 import { connect } from 'react-redux';
 import MechsListHeader from "./MechsListHeader";
 import MechsListRow from "./MechsListRow";
-import schema from '../../../schema';
+import orm from '../../../schema';
 import { selectMech } from '../mechActions';
 import { selectCurrentMech } from '../mechSelectors';
 
@@ -33,7 +33,7 @@ class MechsList extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const session = schema.from(state.entities);
+    const session = orm.session(state.entities);
     const { Mech } = session;
 
     const mechIDs = Mech.all().toModelArray().map(mechModel => mechModel.getId());
