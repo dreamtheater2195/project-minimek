@@ -35,7 +35,7 @@ const mapStateToProps = (state) => {
     const { Pilot } = session;
 
     // Extract a list of IDs for each Pilot entry
-    const pilotIDs = Pilot.all().withModels.map(pilotModel => pilotModel.getId());
+    const pilotIDs = Pilot.all().toModelArray().map(pilotModel => pilotModel.getId());
 
     const currentPilotID = selectCurrentPilot(state);
 

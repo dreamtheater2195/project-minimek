@@ -1,6 +1,6 @@
 import { createReducer } from "./../common/utils/reducerUtils";
-import schema from "../schema";
-const defaultEditingEntities = schema.getDefaultState();
+import orm from "../schema";
+const defaultEditingEntities = orm.getEmptyState();
 export default createReducer(defaultEditingEntities, {
 
 }); 

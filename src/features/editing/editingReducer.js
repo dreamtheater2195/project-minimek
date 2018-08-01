@@ -1,5 +1,5 @@
 import { createReducer } from "../../common/utils/reducerUtils";
-import schema from '../../schema';
+import orm from '../../schema';
 import {
     createEntity,
     updateEntity,
@@ -29,11 +29,11 @@ export function copyEntity(sourceEntities, destinationEntities, payload) {
 }
 
 export function updateEditedEntity(sourceEntities, destinationEntities, payload) {
-    const readSession = schema.from(sourceEntities);
+    const readSession = orm.session(sourceEntities);
     const { itemType, itemID } = payload;
     const model = getModelByType(readSession, itemType, itemID);
 
-    let writeSession = schema.from(destinationEntities);
+    let writeSession = orm.session(destinationEntities);
     const ModelClass = writeSession[itemType];
     if (ModelClass.hasId(itemID)) {
         const existingItem = ModelClass.withId(itemID);
@@ -41,8 +41,7 @@ export function updateEditedEntity(sourceEntities, destinationEntities, payload)
             existingItem.updateFrom(model);
         }
     }
-    const updatedEntities = writeSession.reduce();
-    return updatedEntities;
+    return writeSession.state;
 }
 
 export function editItemExisting(state, payload) {

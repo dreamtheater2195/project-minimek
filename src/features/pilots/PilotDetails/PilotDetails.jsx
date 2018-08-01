@@ -57,7 +57,7 @@ export class PilotDetails extends Component {
 
     onResetClicked = () => {
         const { id } = this.props.pilot;
-        this.props.resetEditedItem("Pilot", id);
+        this.props.resetEditingItem("Pilot", id);
     }
     render() {
 

@@ -36,7 +36,7 @@ const mapStateToProps = (state) => {
     const session = schema.from(state.entities);
     const { Mech } = session;
 
-    const mechIDs = Mech.all().withModels.map(mechModel => mechModel.getId());
+    const mechIDs = Mech.all().toModelArray().map(mechModel => mechModel.getId());
 
     const currentMechID = selectCurrentMech(state);
 
